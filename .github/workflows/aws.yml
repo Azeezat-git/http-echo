@@ -23,20 +23,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
-            - name: Install terraform
-              uses: hashicorp/setup-terraform@v3
-
             - name: Terraform Init
-              run: terraform init
-              
-            - name: Terraform Validate
-              id: validate
-              run: terraform validate -no-color
-
-            - name: Terraform Plan
-              id: plan
-              run: terraform plan -no-color
-              continue-on-error: false
+              uses: hashicorp/terraform-github-actions@master
+              with:
+                tf_actions_version: 0.14.3
+                tf_actions_subcommand: 'init'
+                tf_actions_working_dir: ${{ env.tf_actions_working_dir }}
+                tf_actions_comment: true
              
 
 
