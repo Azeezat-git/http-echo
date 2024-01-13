@@ -34,9 +34,10 @@ jobs:
                 ECR_REPOSITORY: "app_repo"
                 IMAGE_TAG: latest
               run: |
-                docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-                docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-                echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+                #docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+                #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                docker pull hashicorp/http-echo
+                echo "::set-output name=image::docker.io/hashicorp/http-echo:latest"
 
             - name: Fill in the new image ID in the Amazon ECS task definition
               id: task-def-1
