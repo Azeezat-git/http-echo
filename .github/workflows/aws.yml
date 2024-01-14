@@ -9,7 +9,7 @@ env:
     CONTAINER_NAME: cb-app
     ECS_SERVICE: app_service
     ECS_TD: .github/workflows/td.json
-    tf_actions_working_dir: "terraform"
+    tf_actions_working_dir: "."
 
 jobs:
     Building-the-infrastructure:
