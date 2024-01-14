@@ -9,7 +9,7 @@ env:
     CONTAINER_NAME: cb-app
     ECS_SERVICE: app_service
     ECS_TD: .github/workflows/td.json
-    tf_actions_working_dir: "../../terraform"
+    tf_actions_working_dir: "."
 
 jobs:
     Building-the-infrastructure:
@@ -79,6 +79,7 @@ jobs:
                 docker pull hashicorp/http-echo
                 docker tag hashicorp/http-echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
                 docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                #echo "::set-output name=image::docker.io/hashicorp/http-echo:latest"
                 echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
             - name: Fill in the new image ID in the Amazon ECS task definition
