@@ -3,5 +3,3 @@
 *.tfstate.backup
 .terraform.tfstate.lock.info
 
-# Module directory
-.terraform/
