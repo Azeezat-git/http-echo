@@ -129,7 +129,7 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v1
 
-            - name: Build, tag, and push image to Amazon ECR
+            - name: Build, test, tag, and push image to Amazon ECR
               id: build-image
               env:
                 ECR_REGISTRY: "758560478625.dkr.ecr.us-east-1.amazonaws.com"
@@ -138,11 +138,14 @@ jobs:
               run: |
                 
                 docker pull hashicorp/http-echo
+                docker run --rm hashicorp/http-echo
                 docker tag hashicorp/http-echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
                 docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
                 #echo "::set-output name=image::docker.io/hashicorp/http-echo:latest"
                 echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+            
 
+            
             - name: Fill in the new image ID in the Amazon ECS task definition
               id: task-def-1
               uses: aws-actions/amazon-ecs-render-task-definition@v1
