@@ -48,6 +48,17 @@ resource "aws_appautoscaling_policy" "down" {
   depends_on = [aws_appautoscaling_target.target]
 }
 
+
+resource "aws_sns_topic" "ecs_alerts_topic" {
+  name = "ecs_alerts_topic"
+}
+
+resource "aws_sns_topic_subscription" "ecs_alerts_subscription" {
+  topic_arn = aws_sns_topic.ecs_alerts_topic.arn
+  protocol  = "email"
+  endpoint  = "bimsol4real@gmail.com"
+}
+
 # CloudWatch alarm that triggers the autoscaling up policy
 resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   alarm_name          = "cb_cpu_utilization_high"
@@ -64,7 +75,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
     ServiceName = aws_ecs_service.service.name
   }
 
-  alarm_actions = [aws_appautoscaling_policy.up.arn]
+  alarm_actions = [aws_appautoscaling_policy.up.arn, aws_sns_topic.ecs_alerts_topic.arn]
 }
 
 # CloudWatch alarm that triggers the autoscaling down policy
@@ -83,5 +94,5 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
     ServiceName = aws_ecs_service.service.name
   }
 
-  alarm_actions = [aws_appautoscaling_policy.down.arn]
+  alarm_actions = [aws_appautoscaling_policy.down.arn, aws_sns_topic.ecs_alerts_topic.arn]
 }
