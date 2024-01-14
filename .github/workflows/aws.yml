@@ -6,7 +6,7 @@ on:
 env: 
     AWS_REGION: us-east-1
     ECS_CLUSTER: app_cluster
-    CONTAINER_NAME: app
+    CONTAINER_NAME: cb-app
     ECS_SERVICE: app_service
     ECS_TD: .github/workflows/td.json
     tf_actions_working_dir: "terraform"

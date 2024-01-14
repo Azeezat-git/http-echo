@@ -2,7 +2,7 @@
     "taskDefinitionArn": "arn:aws:ecs:us-east-1:758560478625:task-definition/app",
     "containerDefinitions": [
         {
-            "name": "app",
+            "name": "cb-app",
             "image": "758560478625.dkr.ecr.us-east-1.amazonaws.com/app_repo",
             "cpu": 256,
             "memory": 512,
@@ -23,6 +23,14 @@
     "taskRoleArn": "arn:aws:iam::758560478625:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::758560478625:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "/ecs/cb-app",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+        }
+    },
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
