@@ -3,6 +3,7 @@ on:
     push:
         branches:
             - main
+            - dev
 env: 
     AWS_REGION: us-east-1
     ECS_CLUSTER: app_cluster
@@ -17,7 +18,7 @@ jobs:
         runs-on: ubuntu-latest
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-        environment: dev
+        environment: prod
         defaults:
           
             run:
@@ -83,7 +84,8 @@ jobs:
     deploy:
         name: Deploy
         runs-on: ubuntu-latest
-        environment: dev
+        environment: prod
+        needs: Building-the-infrastructure-to-prod
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
 
