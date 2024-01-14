@@ -23,14 +23,6 @@
     "taskRoleArn": "arn:aws:iam::758560478625:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::758560478625:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-            "awslogs-group": "/ecs/cb-app",
-            "awslogs-region": "us-east-1",
-            "awslogs-stream-prefix": "ecs"
-        }
-    },
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
