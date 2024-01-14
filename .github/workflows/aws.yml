@@ -9,7 +9,6 @@ env:
     CONTAINER_NAME: cb-app
     ECS_SERVICE: app_service
     ECS_TD: .github/workflows/td.json
-    tf_actions_working_dir: "./terraform"
 
 jobs:
     Building-the-infrastructure:
@@ -20,7 +19,6 @@ jobs:
           
             run:
                  shell: bash
-                 working-directory: ./terraform
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -29,7 +27,6 @@ jobs:
               uses: hashicorp/terraform-github-actions@master
               with:
                 tf_actions_version: 0.14.3
-                tf_actions_working_dir: "./terraform"
                 tf_actions_subcommand: 'fmt -check'
                 tf_actions_comment: true
               continue-on-error: true
@@ -38,14 +35,12 @@ jobs:
               uses: hashicorp/terraform-github-actions@master
               with:
                 tf_actions_version: 0.14.3
-                tf_actions_working_dir: "./terraform"
                 tf_actions_subcommand: 'init'
                 tf_actions_comment: true
             - name: Terraform Validate
               uses: hashicorp/terraform-github-actions@master
               with:
                 tf_actions_version: 0.14.3
-                tf_actions_working_dir: "./terraform"
                 tf_actions_subcommand: 'validate'
                 tf_actions_comment: true
 
@@ -53,7 +48,6 @@ jobs:
               uses: hashicorp/terraform-github-actions@master
               with:
                 tf_actions_version: 0.14.3
-                tf_actions_working_dir: "./terraform"
                 tf_actions_subcommand: 'plan'
                 tf_actions_comment: true
 
@@ -61,7 +55,6 @@ jobs:
               uses: hashicorp/terraform-github-actions@master
               with:
                 tf_actions_version: 0.14.3
-                tf_actions_working_dir: "./terraform"
                 tf_actions_subcommand: 'apply'
                 tf_actions_comment: true
             
