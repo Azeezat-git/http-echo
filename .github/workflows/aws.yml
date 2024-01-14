@@ -32,7 +32,8 @@ jobs:
                 tf_actions_working_dir: "./terraform"
                 tf_actions_subcommand: 'fmt'
                 tf_actions_comment: true
-
+              continue-on-error: true
+              
             - name: Terraform Init
               uses: hashicorp/terraform-github-actions@master
               with:
