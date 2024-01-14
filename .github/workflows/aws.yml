@@ -78,8 +78,7 @@ jobs:
                 ECR_REPOSITORY: "app_repo"
                 IMAGE_TAG: latest
               run: |
-                #docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-                #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                
                 docker pull hashicorp/http-echo
                 docker tag hashicorp/http-echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
                 docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
