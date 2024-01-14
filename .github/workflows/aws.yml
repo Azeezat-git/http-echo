@@ -82,7 +82,6 @@ jobs:
                 docker pull hashicorp/http-echo
                 docker tag hashicorp/http-echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
                 docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-                #echo "::set-output name=image::docker.io/hashicorp/http-echo:latest"
                 echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
             - name: Fill in the new image ID in the Amazon ECS task definition
