@@ -1,0 +1,66 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:758560478625:task-definition/app",
+    "containerDefinitions": [
+        {
+            "name": "cb-app",
+            "image": "hashicorp/http-echo:latest",
+            "cpu": 256,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "containerPort": 5678,
+                    "hostPort": 5678,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": []
+        }
+    ],
+    "family": "app",
+    "taskRoleArn": "arn:aws:iam::758560478625:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::758560478625:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "/ecs/cb-app",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+        }
+    },
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "registeredAt": "2024-01-13T12:09:53.880Z",
+    "registeredBy": "arn:aws:iam::758560478625:user/admin",
+    "tags": []
+}

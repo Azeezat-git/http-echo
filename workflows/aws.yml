@@ -1,0 +1,105 @@
+name: Deployment to AWS ECS
+on: 
+    push:
+        branches:
+            - main
+env: 
+    AWS_REGION: us-east-1
+    ECS_CLUSTER: app_cluster
+    CONTAINER_NAME: cb-app
+    ECS_SERVICE: app_service
+    ECS_TD: "workflows/td.json"
+    tf_actions_working_dir: "./terraform"
+
+jobs:
+    Building-the-infrastructure:
+        name: "Terraform"
+        runs-on: ubuntu-latest
+        environment: dev
+        defaults:
+            run:
+                 working-directory: ${{ env.tf_actions_working_dir }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Terraform Init
+              uses: hashicorp/terraform-github-actions@master
+              with:
+                tf_actions_version: 0.14.3
+                tf_actions_subcommand: 'init'
+                tf_actions_working_dir: "./terraform"
+                tf_actions_comment: true
+
+            - name: Terraform plan
+              uses: hashicorp/terraform-github-actions@master
+              with:
+                tf_actions_version: 0.14.3
+                tf_actions_subcommand: 'plan'
+                tf_actions_working_dir: "./terraform"
+                tf_actions_comment: true
+
+            - name: Terraform apply
+              uses: hashicorp/terraform-github-actions@master
+              with:
+                tf_actions_version: 0.14.3
+                tf_actions_subcommand: 'apply'
+                tf_actions_working_dir: "./terraform"
+                tf_actions_comment: true
+            
+             
+
+
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        environment: dev
+        
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v3
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ env.AWS_REGION }}
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v1
+
+            - name: Build, tag, and push image to Amazon ECR
+              id: build-image
+              env:
+                ECR_REGISTRY: "758560478625.dkr.ecr.us-east-1.amazonaws.com"
+                ECR_REPOSITORY: "repo"
+                IMAGE_TAG: latest
+              run: |
+                
+                docker pull hashicorp/http-echo
+                docker tag hashicorp/http-echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                #echo "::set-output name=image::docker.io/hashicorp/http-echo:latest"
+                echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+            - name: Fill in the new image ID in the Amazon ECS task definition
+              id: task-def-1
+              uses: aws-actions/amazon-ecs-render-task-definition@v1
+              with:
+                task-definition: ${{ env.ECS_TD }}
+                container-name: ${{ env.CONTAINER_NAME }}
+                image: ${{ steps.build-image.outputs.image }}
+
+            - name: Deploy Amazon ECS task definition
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+              with:
+                task-definition: ${{ steps.task-def-1.outputs.task-definition }}
+                service: ${{ env.ECS_SERVICE }}
+                cluster: ${{ env.ECS_CLUSTER }}
+                wait-for-service-stability: false
+
+
+
