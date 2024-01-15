@@ -1,7 +1,6 @@
-# # Compiled files
-# *.tfstate
-# *.tfstate.backup
-# .terraform.tfstate.lock.info
-
-# Module directory
-.terraform/
+*.go
+Dockerfile
+.release
+docs
+version
+Makefile
