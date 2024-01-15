@@ -71,3 +71,7 @@ Also, CW alarm triggers the auto-scaling policy and SNS sends alerts and notific
 ![CW Alarms](CW_CPU_high.png)
 
 
+# Potential Next Steps
+
+1.) Adding an SSL/TLS certificate to the ALB
+2.) Introducing DNS, and accepting traffic from DNS server--->ELB
