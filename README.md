@@ -26,14 +26,14 @@ This project deploys a GO webserver that echoes `Hello World` when visited on th
 ### Step1: Scalability and Security
 AWS ECS was employed which is a managed container orchestration service. Fargate serverless type was used in order not to manage the underlying EC2 instances. Using ECS makes the deployment and scaling easy, and the task definition houses the container requirements. 
 
-High Availability/Scalability/Loadbalancing: AWS ELB `cb-load-balancer` with subnets from different AZs and it distributes incoming traffic to the ECS tasks. linked to the ECS service named `app-service`. ASG in turn scales on CPU metric targets the ECS service and scales up/down when the Task CPU utilization is greater than 85 or lesser than 10. CloudWatch alarm triggers the scaling, which the ASG policy will respond to. Furthermore, an SNS alarm to email is triggered when scaling occurs.
+**_High Availability/Scalability/Loadbalancing_**: AWS ELB `cb-load-balancer` with subnets from different AZs and it distributes incoming traffic to the ECS tasks. linked to the ECS service named `app-service`. ASG in turn scales on CPU metric targets the ECS service and scales up/down when the Task CPU utilization is greater than 85 or lesser than 10. CloudWatch alarm triggers the scaling, which the ASG policy will respond to. Furthermore, an SNS alarm to email is triggered when scaling occurs.
 
 ![ELB](ELB.png)
 
 
-Fault-Tolerance: The AWS ECS as an orchestration service is self-healing. Coupled with the service definition and Auto-Scaling in place, the number of required tasks is always kept running. Furthermore, different subnets are in use, so failure or outage in 1 AZ will not affect the application. Also, multiple environments (dev and prod) are in place. This is to ensure that all tests are carried out in staging (dev) before pushing to prod. A reviewer will be notified by email for approval and deployment
+**_Fault-Tolerance_**: The AWS ECS as an orchestration service is self-healing. Coupled with the service definition and Auto-Scaling in place, the number of required tasks is always kept running. Furthermore, different subnets are in use, so failure or outage in 1 AZ will not affect the application. Also, multiple environments (dev and prod) are in place. This is to ensure that all tests are carried out in staging (dev) before pushing to prod. A reviewer will be notified by email for approval and deployment
 
-Security: The architecture is built such that, the ELB is in a public subnet while the ECS cluster is in a private subnet with the least required privileges allowed in the security groups. This prevents direct access to the containers. Also, IAM permissions are based on the least privileges.
+**_Security_**: The architecture is built such that, the ELB is in a public subnet while the ECS cluster is in a private subnet with the least required privileges allowed in the security groups. This prevents direct access to the containers. Also, IAM permissions are based on the least privileges.
 
 ![ELB-SG](ELB_SG.png)
 
@@ -49,9 +49,9 @@ The pipeline used was Github Actions, and the CICD file can be found in `.github
 
 The CICD file was created to push to both prod and dev environments, depending on the git branch ref. The file consisted of 2 stages for each env. Each stage has multiple steps. 
 
-1.) Building and testing: This covers checkout, credentials configuration, formatting, validating, planning, and applying infrastructure files which are in the terraform directory
+1.) **_Building and testing_**: This covers checkout, credentials configuration, formatting, validating, planning, and applying infrastructure files which are in the terraform directory
 
-2.) Deployment: This stage covers pulling, tagging, and pushing the docker image to ECR. Furthermore, it updates the task definition file with the image ID and deploys it to the ECS cluster.
+2.) **_Deployment_**: This stage covers pulling, tagging, and pushing the docker image to ECR. Furthermore, it updates the task definition file with the image ID and deploys it to the ECS cluster.
 
 If the `github.ref=='refs/heads/main'` on push, the workflow triggers an approval process, where the reviewer gets an email. The deployment can only be continued upon approval
 
