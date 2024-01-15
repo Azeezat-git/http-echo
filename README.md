@@ -1,25 +1,25 @@
 # HTTP ECHO PROJECT
 
 ### About
-This project deploys a GO webserver that echoes `Hello World` when visited on the browser.
+This project deploys a GO webserver that echoes `Hello World` when visited on the browser. The application image is being containerized to make it durable, light-weight, platform independent and self-healing.
 
-The tools used are:
+### The tools used are:
 
-* ### Version Control: Git
-* ### Infrastructure Provisioning: Terraform
-* ### Cloud Environment: AWS
-* ### Repository: AWS ECR
-* ### CI/CD Tool: Github Action Workflow Pipeline
-* ### Frontend: AWS ELB
-* ### Backend: Serverless AWS ECS (Fargate launch type)
-* ### Logs: CloudWatch log
-* ### Monitoring: CloudWatch Dashboard
-* ### Notifications: SNS Topic, Github Approval
+*  Version Control: `Git`
+*  Infrastructure Provisioning: `Terraform`
+*  Cloud Environment: `AWS`
+*  Image Repository: `AWS ECR`
+*  CI/CD Tool: `Github Action`
+*  Frontend: `AWS ELB`
+*  Backend: `Serverless AWS ECS (Fargate launch type)`
+*  Logs: `CloudWatch log`
+*  Monitoring: `CloudWatch Dashboard`
+*  Notifications: `SNS Topic`, `Github Approval`
 
 ### General Project Flow
-1. Terraform files, pipeline file and task definition files are added locally and pushed to Github 
+1. Terraform files, pipeline file and task definition files are created locally and pushed to Github 
 2. The branches in use are: Main and Dev
-3. Based on the pipeline flow, Github action workflow is triggered on-push and the stages are run.
+3. Based on the pipeline flow, Github action workflow is triggered on-push and the stages are ran.
 4. Automated approval is triggered in prod, and the reviewer has to approve before deployment takes place. 
 5. Upon successful workflow run, the infrastructure and deployment reflects in AWS, and the app is reachable on http://cb-load-balancer-1620835627.us-east-1.elb.amazonaws.com:5678/
  
@@ -37,16 +37,24 @@ Iac tools are employed for the deployment. Git is used for version controlling a
 
 ### Step3: CICD
 
-The pipeline used was Github Actions, and the CICD file can be found in `.github/workflow/aws.yml` It was used becuase it doesn't requires extra server provisioning such as Jenkins. Another option that was considered was AWS CodePipeline, but not used.
+The pipeline used was Github Actions, and the CICD file can be found in `.github/workflow/aws.yml` It was used because it doesn't require extra server provisioning such as Jenkins. Another option that was considered was AWS CodePipeline, but not used.
 
-The CICD file was created to push to both prod and dev envs, depending on the git branch ref. The file consisted of 2 stages for each env. Each stages has multiple steps. 
+The CICD file was created to push to both prod and dev envs, depending on the git branch ref. The file consisted of 2 stages for each env. Each stage has multiple steps. 
 
-1.) Building and testing: This covers checkout, credentials configuration, formating, validating, planning and applying infrastructure files which are in the terrfaorm directory
-2.) Deployment: This stage covers pulling, tagging, and pushing of the docker image to ECR. Furthermore, it updates the task definition file with the image ID and deploys to the ECS cluster.
+1.) Building and testing: This covers checkout, credentials configuration, formatting, validating, planning, and applying infrastructure files which are in the terraform directory
+2.) Deployment: This stage covers pulling, tagging, and pushing the docker image to ECR. Furthermore, it updates the task definition file with the image ID and deploys it to the ECS cluster.
 
 If the `github.ref=='refs/heads/main'` on push, the workflow triggers an approval process, where the reviewer gets an email. The deployment can only be continued upon approval
 
-Environment secrets such as AWS secret and Access keys are stored and encrypted in Github secrets, and passed as a variable in the pipeline
+Environment secrets such as AWS secret and Access keys are stored and encrypted in Github secrets, and passed as a variable in the pipeline.
+
+### Step4: Deployment Strategies
+The deployment strategy used is Rolling Updating. This will ensure that there is no downtime during deployment. The `deployment_maximum_percent` is set to 200 while the `deployment_minimum_healthy_percent` is 100
+
+### Step5: Monitoring and Logging
+CloudWatch(CW) was being employed for monitoring and logging. The application logs flow to Cloudwatch logs and stream, and the deployment is being monitored from CW dashboard. Critical metrics alert and Infrastructure logs are sent to CW dashboard.
+
+Also, CW alarm triggers the auto-scaling policy and SNS sends alerts and notifications to the subscriber when scaling happens.
 
 
 
