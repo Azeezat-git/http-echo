@@ -74,4 +74,5 @@ Also, CW alarm triggers the auto-scaling policy and SNS sends alerts and notific
 # Potential Next Steps
 
 1.) Adding an SSL/TLS certificate to the ALB
+
 2.) Introducing DNS, and accepting traffic from DNS server--->ELB
