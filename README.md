@@ -28,7 +28,7 @@ AWS ECS was employed which is a managed container orchestration service. Fargate
 
 High Availability/Scalability/Loadbalancing: AWS ELB `cb-load-balancer` with subnets from different AZs and it distributes incoming traffic to the ECS tasks. linked to the ECS service named `app-service`. ASG in turn scales on CPU metric targets the ECS service and scales up/down when the Task CPU utilization is greater than 85 or lesser than 10. CloudWatch alarm triggers the scaling, which the ASG policy will respond to. Furthermore, an SNS alarm to email is triggered when scaling occurs.
 
-![ELB](elb.png)
+![ELB](ELB.png)
 
 
 Fault-Tolerance: The AWS ECS as an orchestration service is self-healing. Coupled with the service definition and Auto-Scaling in place, the number of required tasks is always kept running. Furthermore, different subnets are in use, so failure or outage in 1 AZ will not affect the application. Also, multiple environments (dev and prod) are in place. This is to ensure that all tests are carried out in staging (dev) before pushing to prod. A reviewer will be notified by email for approval and deployment
