@@ -50,6 +50,7 @@ The pipeline used was Github Actions, and the CICD file can be found in `.github
 The CICD file was created to push to both prod and dev environments, depending on the git branch ref. The file consisted of 2 stages for each env. Each stage has multiple steps. 
 
 1.) Building and testing: This covers checkout, credentials configuration, formatting, validating, planning, and applying infrastructure files which are in the terraform directory
+
 2.) Deployment: This stage covers pulling, tagging, and pushing the docker image to ECR. Furthermore, it updates the task definition file with the image ID and deploys it to the ECS cluster.
 
 If the `github.ref=='refs/heads/main'` on push, the workflow triggers an approval process, where the reviewer gets an email. The deployment can only be continued upon approval
@@ -69,6 +70,15 @@ Also, CW alarm triggers the auto-scaling policy and SNS sends alerts and notific
 ![CW Alarms](CW_CPU_low.png)
 
 ![CW Alarms](CW_CPU_high.png)
+
+### Steps to Reproduce
+1.) Update the terraform file, such as the vars.tf, and backend.
+
+2.) Add secrets to the CICD server
+
+3.) Create 2 git branches dev and main
+
+4.) Add Github deployment reviewer from Github repo--->Settings--->Environments--->Deployment protection rule--->Required reviewers
 
 
 # Potential Next Steps
