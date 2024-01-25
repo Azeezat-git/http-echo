@@ -1,4 +1,4 @@
-# HTTP ECHO PROJECT
+# HTTP-ECHO PROJECT
 
 ### About
 This project deploys a GO webserver that echoes `Hello World` when visited on the browser. The application image is being containerized to make it durable, lightweight, platform-independent and self-healing.
