@@ -35,23 +35,39 @@ resource "aws_ecs_service" "service" {
 }
 
 resource "aws_ecs_task_definition" "td" {
-  family = "app"
-  container_definitions = jsonencode([
+  family                   = "app"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = "256"
+  memory                   = "512"
+  network_mode             = "awsvpc"
+  task_role_arn            = "arn:aws:iam::758560478625:role/ecsTaskExecutionRole"
+  execution_role_arn       = "arn:aws:iam::758560478625:role/ecsTaskExecutionRole"
 
+  container_definitions = jsonencode([
     {
-      name      = "cb-app"
-      image     = "758560478625.dkr.ecr.us-east-1.amazonaws.com/app_repo"
-      cpu       = 256
-      memory    = 512
-      essential = true
-      portMappings = [
+      name            = "cb-app"
+      image           = "758560478625.dkr.ecr.us-east-1.amazonaws.com/app_repo"
+      cpu             = 256
+      memory          = 512
+      essential       = true
+      portMappings    = [
         {
           containerPort = 5678
           hostPort      = 5678
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options   = {
+          "awslogs-group"         = "/ecs/cb-app"
+          "awslogs-region"        = "us-east-1"
+          "awslogs-stream-prefix" = "cb-app"
+        }
+      }
     }
   ])
+}
+
 
 
   requires_compatibilities = ["FARGATE"]
