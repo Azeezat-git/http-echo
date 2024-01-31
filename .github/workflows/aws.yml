@@ -4,6 +4,12 @@ on:
         branches:
             - main
             - dev
+
+    workflow_dispatch:
+        inputs:
+          environment:
+            description: 'Target environment dev and prod)'
+            required: true
 env: 
     AWS_REGION: us-east-1
     ECS_CLUSTER: app_cluster
@@ -17,7 +23,9 @@ jobs:
     Building-the-infrastructure-in-dev:
         name: "Testing and Building"
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev')
 
         environment: dev
         defaults:
@@ -87,7 +95,9 @@ jobs:
         runs-on: ubuntu-latest
         environment: dev
         needs: Building-the-infrastructure-in-dev
-        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev')
 
 
         
@@ -142,7 +152,9 @@ jobs:
     Building-the-infrastructure-in-prod:
         name: "Testing and Building"
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod')
 
         environment: prod
         defaults:
@@ -212,7 +224,9 @@ jobs:
         runs-on: ubuntu-latest
         environment: prod
         needs: Building-the-infrastructure-in-prod
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod')
 
 
         
