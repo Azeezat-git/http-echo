@@ -16,7 +16,15 @@
             "essential": true,
             "environment": [],
             "mountPoints": [],
-            "volumesFrom": []
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/cb-app",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "cb-app"
+                }
+            }
         }
     ],
     "family": "app",
