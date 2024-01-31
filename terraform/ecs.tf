@@ -67,14 +67,3 @@ resource "aws_ecs_task_definition" "td" {
     }
   ])
 }
-
-
-
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
-  network_mode             = "awsvpc"
-  task_role_arn            = "arn:aws:iam::758560478625:role/ecsTaskExecutionRole"
-  execution_role_arn       = "arn:aws:iam::758560478625:role/ecsTaskExecutionRole"
-
-}
